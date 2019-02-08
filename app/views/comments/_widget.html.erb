@@ -1,0 +1,11 @@
+<div id="comments-widget-of-commentable-<%= commentable.id %>" class="comments-widget">
+  <h2 class="comments-header">
+    Comentarios <small id="comments-count-of-commentable-<%= commentable.id %>"><%= commentable.comments.size %></small>
+  </h2>
+  
+  <ul class="comments-list">
+    <%= render commentable.comments.includes(:user, :replies, :commentable).where(parent: nil) %>
+  </ul>
+  <!-- comment-form -->
+  <%= render "comments/form", comment: commentable.comments.build  %>
+</div>

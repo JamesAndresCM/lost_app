@@ -1,0 +1,77 @@
+<div class="card shadow-card container center col-md-7 mt-4">
+   <div class="card-header style-header-card">
+      <div class="form-row">
+        <div class="form-group col-md-8">
+          <h4>Formulario de Publicación</h4>
+        </div>
+        <% unless post.persisted? %>
+        <div class="form-group col-md-4">
+          <h6>Publicaciones restantes <span class="badge badge-info"><%=  @quantity %></span></h6>
+          <small class="form-text">5 por día</small>
+        </div>
+        <% end %>
+      </div>
+    </div>
+  <br>
+  
+  <%= simple_form_for post, validate: true do |f| %>
+    <%= f.error_notification %>
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <%= f.input :title, label: "Título"  %>
+        </div>
+        <div class="form-group col-md-6">
+          <%= f.label :datetime_lost, label: "Fecha" %>
+            <div class="input-group date" id="datetimepicker" data-target-input="nearest">
+              <%= f.text_field(:datetime_lost, placeholder: 'dd-mm-yyyy hh:mm', value: post.decorate.value_datetime, class: "form-control datetimepicker-input", 
+                data: {target:"#datetimepicker"}) %>
+                <div class="input-group-append" data-target="#datetimepicker" data-toggle="datetimepicker">
+                  <div class="input-group-text">
+                    <span class="fa fa-calendar"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
+        
+          <%= f.input :description,label: "Descripción",as: :text, input_html: { rows: 6 }, hint: 'máximo 300 caracteres'  %>
+          <%= f.input :status, label: "Estado", as: :radio_buttons, collection: post.current_status, 
+          item_wrapper_class: 'custom-control custom-control-inline' if post.persisted? %>
+
+          <div class="form-row">
+            <div class="form-group col-md-5">
+              <%= f.input :type_post,label: "Tipo", as: :radio_buttons, collection: Post.human_enum_name(:type_posts), 
+              item_wrapper_class: 'custom-control custom-control-inline' unless post.persisted? %>
+            </div>
+            <div class="form-group col-md-7">
+              <%= f.input :category, label: "Categoría", as: :radio_buttons, collection: Post.human_enum_name(:categories), 
+              item_wrapper_class: 'custom-control custom-control-inline' unless post.persisted? %>
+            </div>
+          </div>
+       
+          <div class="card mt-2 mb-2">
+            <div class="card-body row"">
+              <div class="center">
+                <%= post.decorate.img_post %>
+              </div>
+            </div>
+            <div class="custom-file mb-3 upload-img" id="customFile" lang="es">
+                <%= f.file_field :img, class:'form-control custom-file-input', id: 'post-upload' %>
+                  <label class="mb-2 custom-file-label">
+                   Imagen
+                  </label>
+              </div>
+              <%= f.hidden_field :img_cache %>
+          </div>
+          <div class="card mb-4">
+            <div class="card-body">
+              <%= f.label :regions, label: "Región" %>  
+              <select class="form-control" id="regions"></select>
+              <small class="mb-2 form-text text-muted">región-provincia</small>
+              <%= f.input :district_id ,label: "Comuna", required: true,as: :select , collection: post.region.try(:districts) || 
+              [], prompt: "Seleccione Comuna" %>
+            </div>
+          </div>
+        <%= f.button :submit, class: 'btn-block mb-4 btn btn-sm btn-primary' %>
+  <% end %>
+</div>

@@ -1,0 +1,11 @@
+<div class="card mb-2">
+    <%= post.decorate.image_card('card-img-top') %>
+    <div class="card-body">
+      <h5 class="card-title"><%= post.title %></h5>
+      <p class="card-text scroll-description"><%= post.description %></p>
+      <a href="<%= post_path(post) %>" class="btn btn-sm btn-block btn-primary mb-2 mt-2">Ver más</a>
+    </div>
+    <div class="card-footer">
+      <%= post.decorate.time_ago %>
+    </div>
+</div>

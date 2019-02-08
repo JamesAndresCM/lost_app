@@ -1,0 +1,47 @@
+<div class="container py-3">
+    <div class="card shadow-card container center mt-4">
+      <div class="card-header style-header-card mb-3">
+        <div class="form-row">
+          <div class="form-group col-md-9">
+            <h4><%= post.post_title %></h4>
+          </div>
+        <% if post.user_id == current_user.id %>
+        <div class="from-group col-md-3">
+            <div class="btn-toolbar">
+              <div class="btn-group">
+                <%= post.delete_icon  %>
+              </div>
+              <% unless post.status_found? || post.status_received? %>
+                <div class="btn-group ml-3">
+                  <button class="btn btn-sm"><%= post.edit_icon%></button>
+                </div>
+              <% end %>
+            </div>
+        </div>
+        <% end %>
+      </div>
+    </div>
+
+      <div class="row ">
+        <div class="col-md-4">
+          <%= post.image_card('card-img-top img-fluid mb-2') %>
+        </div>
+          <div class="col-md-8 px-3">
+            <div class="card-block px-3">
+              <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item"><%= post.region_name %></li>
+                  <li class="breadcrumb-item"><%= post.district_name %></li>
+                  <li class="breadcrumb-item" aria-current="page"><%= post.datetime_lost %></li>
+                </ol>
+              </nav>
+                <%= image_tag(post.user_avatar, class: 'img-fluid img_nav_profile') %> 
+                <span class="text-muted"><%= post.user_username %></span>
+              <br><hr>
+            <p class="card-text mb-3"><%= post.description %></p>              
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+<%= render "comments/widget", commentable: post %>

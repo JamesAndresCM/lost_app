@@ -1,0 +1,25 @@
+<ul>
+  <li id="comment_<%= comment.id %>" class="comment">
+    <div class="comment-content">
+      <%= comment.content %>
+    </div>
+    <div class="comment-info">
+      <small>-
+        <%= comment.user.username %> •
+        <%= localize(comment.created_at, format: :long) %> •
+        <% if can? :update, comment %>
+        <%= link_to "Editar", edit_polymorphic_path([comment.commentable, comment]), class: 'edit-comment-link', remote: true  %> •
+        <% end %>
+        <% if can? :destroy, comment %>
+        <%= link_to "Destruir", [comment.commentable, comment], method: :delete, class: 'delete-comment-link', data:{confirm:"estas seguro?"}, remote: true %> •
+        <% end %>
+        <%= link_to "Responder", polymorphic_path([:reply, comment.commentable, comment]), class: 'reply-comment-link', remote: true  %>
+      </small>
+    </div>
+    <% if comment.replies.any? %>
+      <ul>
+       <%= render comment.replies %>
+      </ul>
+    <% end %>
+  </li>
+</ul>
